@@ -1,0 +1,47 @@
+function [pos, DM]=PartABAC2(DM,W,t,b,cb)   
+        i=b;
+        p=t-1;
+        strcat('ranking of ',' ',num2str(t),' between',' ',num2str(b))
+        for k=t:(b-1)
+            RGUN=product(power_non_int(DM{i,1},W(1,1)),power_non_int(DM{i,2},W(1,2)));
+            RGLN=product(power_non_int(DM{k,1},W(1,1)),power_non_int(DM{k,2},W(1,2)));
+            for j=3:size(cb,2)
+                if cb(1,j)==1
+                    RGUN=product(RGUN,power_non_int(DM{k,j},W(1,j)));
+                    RGLN=product(RGLN,power_non_int(DM{i,j},W(1,j)));
+                else
+                    RGUN=product(RGUN,power_non_int(DM{i,j},W(1,j)));
+                    RGLN=product(RGLN,power_non_int(DM{k,j},W(1,j)));
+                end                                    
+            end
+            [sab, alphaab, cab]=scoreEsra(RGLN,RGUN);
+
+            if sab>0.5
+                RGalt=1;
+                RGust=2;
+            elseif sab==0.5 && alphaab>0.5
+                RGalt=1;
+                RGust=2;
+            elseif sab==0.5 && alphaab==0.5 && cab>0.5
+                RGalt=1;
+                RGust=2;
+            else
+                RGalt=1;
+                RGust=1;
+            end
+            
+            if RGust>RGalt
+                p=p+1;
+                if p~=k
+                    DM=swap(DM,p,k);
+                    DM(:,14)'
+                end
+            end              
+        end         
+    DM=swap(DM,p+1,b);
+    pos=p+1;
+    DM(:,14)'
+    
+    % rnk='ranking of ',num2str(t),' between ',num2str(b);
+    % strcat('ranking of ',' ',num2str(t),' between',' ',num2str(b))
+end
