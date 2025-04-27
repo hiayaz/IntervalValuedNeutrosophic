@@ -1,0 +1,20 @@
+clc 
+clear all
+
+tic
+load ('DM2.mat');
+load('W.mat');
+cb=[2 2 2 2 2 2 2 1 2 2 2 2 2]; % use 1 for cost; use 2 for benefit
+b=size(DM2,1);
+t=1;
+
+for i=1:size(DM2,1)
+    for j=1:size(DM2,2)
+        DM{i,j}=ivnm(DM2{i,j}(1),DM2{i,j}(2),DM2{i,j}(3),DM2{i,j}(4),DM2{i,j}(5),DM2{i,j}(6));  
+    end
+end
+for i=1:size(DM,1)
+    DM{i,14}=i;
+end
+DM=ABAC(DM,W,t,b,cb);
+toc
