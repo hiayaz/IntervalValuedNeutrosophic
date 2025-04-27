@@ -1,0 +1,8 @@
+function DM=ABAC(DM,W,t,b,cb,c)
+    if t<b
+        [pos,DM]=PartABAC2(DM,W,t,b,cb);
+        DM=ABAC(DM,W,t,pos-1,cb);
+        DM=ABAC(DM,W,pos+1,b,cb);        
+    end
+end
+      
